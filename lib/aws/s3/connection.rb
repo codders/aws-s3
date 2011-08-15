@@ -58,10 +58,11 @@ module AWS
       
       def url_for(path, options = {})
         authenticate = options.delete(:authenticated)
+        verb = options.delete(:method) || :get
         # Default to true unless explicitly false
         authenticate = true if authenticate.nil? 
         path         = self.class.prepare_path(path)
-        request      = request_method(:get).new(path, {})
+        request      = request_method(verb).new(path, {})
         query_string = query_string_authentication(request, options)
         returning "#{protocol(options)}#{http.address}#{port_string}#{path}" do |url|
           url << "?#{query_string}" if authenticate

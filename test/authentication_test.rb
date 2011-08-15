@@ -31,7 +31,7 @@ class QueryStringAuthenticationTest < Test::Unit::TestCase
     assert_equal expires, query_string.send(:canonical_string).instance_variable_get(:@options)[:expires]
     assert_equal AmazonDocExampleData::Example3.query_string, query_string
   end
-  
+
   def test_expires_in_is_coerced_to_being_an_integer_in_case_it_is_a_special_integer_proxy
     # References bug: http://rubyforge.org/tracker/index.php?func=detail&aid=17458&group_id=2409&atid=9356
     integer_proxy = Class.new do
@@ -55,6 +55,28 @@ class QueryStringAuthenticationTest < Test::Unit::TestCase
     def key_id ; AmazonDocExampleData::Example3.access_key_id end
     def secret ; AmazonDocExampleData::Example3.secret_access_key end
     def expires; AmazonDocExampleData::Example3.expires end
+end
+
+class HeadMethodTest < Test::Unit::TestCase
+
+  def test_authorization_header
+    header = Authentication::Header.new(request, key_id, secret)
+    assert_equal ExampleData::Example1.canonical_string_header, header.send(:canonical_string)
+    assert_equal ExampleData::Example1.authorization_header, header
+  end
+
+  def test_query_string
+    query_string = Authentication::QueryString.new(request, key_id, secret, :expires_in => 60)
+    assert_equal ExampleData::Example1.canonical_string_query, query_string.send(:canonical_string)
+    assert_equal ExampleData::Example1.query_string, query_string
+  end
+
+  private
+    def request; ExampleData::Example1.request end
+    def key_id ; ExampleData::Example1.access_key_id end
+    def secret ; ExampleData::Example1.secret_access_key end
+    def expires; ExampleData::Example1.expires end
+
 end
 
 class CanonicalStringTest < Test::Unit::TestCase  
