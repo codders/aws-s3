@@ -11,6 +11,48 @@ require_library_or_gem 'flexmock'
 require_library_or_gem 'flexmock/test_unit'
 
 
+module ExampleData
+  module Example1
+    module_function
+    
+      def request
+        request = Net::HTTP::Head.new('/quotes/nelson')
+        request['Content-Type']      = 'text/html'
+        request['Date']              = 'Thu, 17 Nov 2005 18:49:58 GMT'
+        request['X-Amz-Magic']       = 'abracadabra'
+        request
+      end
+  
+      def canonical_string_query
+        "HEAD\n\ntext/html\n1132253458\nx-amz-magic:abracadabra\n/quotes/nelson"
+      end
+ 
+      def canonical_string_header
+        "HEAD\n\ntext/html\nThu, 17 Nov 2005 18:49:58 GMT\nx-amz-magic:abracadabra\n/quotes/nelson"
+      end
+     
+      def access_key_id
+        '44CF9590006BF252F707'
+      end
+      
+      def secret_access_key
+        'OtxrzxIsfpFjA7SwPzILwy8Bw21TLhquhboDYROV'
+      end
+      
+      def signature
+        'jZNOcbfWmD/A/f3hSvVzXZjM2HU='
+      end
+
+      def query_string
+        'AWSAccessKeyId=44CF9590006BF252F707&Expires=1132253458&Signature=mfm9VGIfnfKc20fYJAaYSuYXPpk%3D'
+      end
+      
+      def authorization_header
+        'AWS 44CF9590006BF252F707:hDwh8uo1zH9XTfSQKiyw4j9QyXs='
+      end
+  end
+end
+
 # Data copied from http://docs.amazonwebservices.com/AmazonS3/2006-03-01/RESTAuthentication.html
 module AmazonDocExampleData
   module Example1
