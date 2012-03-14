@@ -82,7 +82,8 @@ module AWS
           end
           
           def date
-            request['date'].to_s.strip.empty? ? Time.now : Time.parse(request['date'])
+            return @date if @date
+            @date = request['date'].to_s.strip.empty? ? Time.now : Time.parse(request['date'])
           end
       end
       

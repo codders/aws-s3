@@ -49,6 +49,13 @@ class QueryStringAuthenticationTest < Test::Unit::TestCase
     query_string = Authentication::QueryString.new(request, key_id, secret, :expires_in => integer_proxy.new(actual_integer))
     assert_equal actual_integer, query_string.send(:expires_in)
   end
+
+  def test_ensure_time_is_only_evaluated_once
+    time = Time.now
+    flexmock(Time).should_receive(:now).once.and_return(time)
+    query_string = Authentication::QueryString.new(request, key_id, secret, :expires_in => 60)
+    assert_equal AmazonDocExampleData::Example3.query_string, query_string
+  end
   
   private
     def request; AmazonDocExampleData::Example3.request end
